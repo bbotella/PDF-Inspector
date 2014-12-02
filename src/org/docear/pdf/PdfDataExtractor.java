@@ -104,6 +104,15 @@ public class PdfDataExtractor {
 					if(entry == null) {
 						// Lo intento por mi cuenta
 
+						char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+						StringBuilder bu = new StringBuilder();
+						Random random = new Random();
+						for (int i = 0; i < 20; i++) {
+							char c = chars[random.nextInt(chars.length)];
+							bu.append(c);
+						}
+						String auxFileName = bu.toString();
+
 						PDFDocument document = new PDFDocument();
 						document.load(file);
 
@@ -114,12 +123,12 @@ public class PdfDataExtractor {
 
 						List<Image> images = renderer.render(document, 0, 0);
 						for (int i = 0; i < images.size(); i++) {
-							ImageIO.write((RenderedImage) images.get(i), "jpg", new File("/tmp/2.jpg"));
+							ImageIO.write((RenderedImage) images.get(i), "jpg", new File("/tmp/"+auxFileName+".jpg"));
 						}
 
-						Runtime.getRuntime().exec(new String[]{"tesseract", "/tmp/2.jpg", "/tmp/2.jpg", "-l spa", "text"}).waitFor();
+						Runtime.getRuntime().exec(new String[]{"tesseract", "/tmp/"+auxFileName+".jpg", "/tmp/"+auxFileName+".jpg", "-l spa", "text"}).waitFor();
 
-						BufferedReader br = new BufferedReader(new FileReader("/tmp/2.jpg.txt"));
+						BufferedReader br = new BufferedReader(new FileReader("/tmp/"+auxFileName+".jpg.txt"));
 						try {
 							StringBuilder sb = new StringBuilder();
 							String line = br.readLine();
@@ -137,6 +146,11 @@ public class PdfDataExtractor {
 //						tryImageExtraction(page, handler);
 //						map = handler.getMap();
 //						entry = map.firstEntry();
+
+						File auxImage = new File("/tmp/"+auxFileName+".jpg");
+						File auxText = new File("/tmp/"+auxFileName+".jpg.txt");
+						auxImage.delete();
+						auxText.delete();
 
 						if(title.compareTo("")==0) {
 							COSInfoDict info = getDocument().getInfoDict();
