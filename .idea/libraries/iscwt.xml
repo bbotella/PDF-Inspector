@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="iscwt">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jpod/iscwt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jpod/isrt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jpod/jbig2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jpod/jPod.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

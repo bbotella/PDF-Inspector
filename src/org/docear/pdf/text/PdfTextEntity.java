@@ -29,26 +29,26 @@ public class PdfTextEntity implements Comparable<PdfTextEntity>{
 		else if(!fontStyle.getLabel().contains("Bold") && entity.fontStyle.getLabel().contains("Bold")) {
 			return 1;
 		}
-		else if(fontStyle.getLabel().contains("BoldItalic") && !entity.fontStyle.getLabel().contains("BoldItalic")) {
-			return -1;
-		}
-		else if(!fontStyle.getLabel().contains("BoldItalic") && entity.fontStyle.getLabel().contains("BoldItalic")) {
-			return 1;
-		}
-		else if(fontStyle.getLabel().contains("Italic") && !entity.fontStyle.getLabel().contains("Italic")) {
-			return -1;
-		}
-		else if(!fontStyle.getLabel().contains("Italic") && entity.fontStyle.getLabel().contains("Italic")) {
-			return 1;
-		}
+//		else if(fontStyle.getLabel().contains("BoldItalic") && !entity.fontStyle.getLabel().contains("BoldItalic")) {
+//			return -1;
+//		}
+//		else if(!fontStyle.getLabel().contains("BoldItalic") && entity.fontStyle.getLabel().contains("BoldItalic")) {
+//			return 1;
+//		}
+//		else if(fontStyle.getLabel().contains("Italic") && !entity.fontStyle.getLabel().contains("Italic")) {
+//			return -1;
+//		}
+//		else if(!fontStyle.getLabel().contains("Italic") && entity.fontStyle.getLabel().contains("Italic")) {
+//			return 1;
+//		}
 		// line comparison
 		else if(startLine < entity.startLine) {
 			return -1;
 		}
-		else if((startLine) > (entity.endLine) || (entity.endLine-entity.startLine) > 8) {
+		else if((startLine) > (entity.endLine) || (entity.endLine-entity.startLine) > 4) {
 			return 1;
 		}
-		
+
 		if(startLine == entity.endLine) {
 			entity.endLine++;
 			if((entity.endLine-entity.startLine) > 8) {

@@ -91,8 +91,9 @@ public class OCRTextExtractor implements IDocearPdfImageHandler {
 			bImage.setData(raster);
 			File file = new File(this.tempFileName);
 			ImageIO.write(bImage, "png", file);
-			
-			Runtime.getRuntime().exec(new String[]{"/Header_Extraction/ocr/Tesseract-ocr/tesseract.exe", file.getAbsolutePath(), file.getAbsolutePath(), "-l eng","hocr"}).waitFor();
+
+//			Runtime.getRuntime().exec(new String[]{"/Header_Extraction/ocr/Tesseract-ocr/tesseract.exe", file.getAbsolutePath(), file.getAbsolutePath(), "-l eng","hocr"}).waitFor();
+			Runtime.getRuntime().exec(new String[]{"tesseract", file.getAbsolutePath(), file.getAbsolutePath(), "-f html -l spa", "hocr"}).waitFor();
 			File htmlFile = new File(file.getParentFile(), file.getName()+".html");
 			if(htmlFile.exists()) {
 				System.out.println("Hooya");

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="fontbox-1.8.7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/fontbox-1.8.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jempbox-1.8.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/pdfbox-1.8.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/preflight-1.8.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xmpbox-1.8.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

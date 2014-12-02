@@ -1,14 +1,19 @@
 package org.docear.pdf;
 
 
+import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.io.File;
-import java.io.IOException;
+import java.awt.image.RenderedImage;
+import java.io.*;
 import java.net.URI;
-import java.util.Iterator;
+import java.util.*;
+import java.util.List;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
+import de.intarsys.pdf.content.CSContent;
+import de.intarsys.pdf.cos.COSDictionary;
+import de.intarsys.pdf.cos.COSName;
+import de.intarsys.pdf.pd.*;
 import org.docear.pdf.feature.ADocumentCreator;
 import org.docear.pdf.image.CSImageExtractor;
 import org.docear.pdf.image.IDocearPdfImageHandler;
@@ -24,11 +29,14 @@ import de.intarsys.pdf.content.CSException;
 import de.intarsys.pdf.content.text.CSTextExtractor;
 import de.intarsys.pdf.cos.COSDocument;
 import de.intarsys.pdf.cos.COSInfoDict;
-import de.intarsys.pdf.pd.PDDocument;
-import de.intarsys.pdf.pd.PDPage;
-import de.intarsys.pdf.pd.PDPageNode;
-import de.intarsys.pdf.pd.PDPageTree;
 import de.intarsys.pdf.tools.kernel.PDFGeometryTools;
+import org.ghost4j.document.PDFDocument;
+import org.ghost4j.renderer.SimpleRenderer;
+import org.xeustechnologies.googleapi.spelling.SpellChecker;
+import org.xeustechnologies.googleapi.spelling.SpellCorrection;
+import org.xeustechnologies.googleapi.spelling.SpellResponse;
+
+import javax.imageio.ImageIO;
 
 public class PdfDataExtractor {
 	private CharSequenceFilter filter = new ReplaceLigaturesFilter();
@@ -94,11 +102,43 @@ public class PdfDataExtractor {
 					TreeMap<PdfTextEntity, StringBuilder> map = tryTextExtraction(page);
 					Entry<PdfTextEntity, StringBuilder> entry = map.firstEntry();
 					if(entry == null) {
-						OCRTextExtractor handler = new OCRTextExtractor(file);
-						//tryImageExtraction(page, handler);
-						map = handler.getMap();
-						entry = map.firstEntry();
-						if(entry == null) {
+						// Lo intento por mi cuenta
+
+						PDFDocument document = new PDFDocument();
+						document.load(file);
+
+						SimpleRenderer renderer = new SimpleRenderer();
+
+						// set resolution (in DPI)
+						renderer.setResolution(200);
+
+						List<Image> images = renderer.render(document, 0, 0);
+						for (int i = 0; i < images.size(); i++) {
+							ImageIO.write((RenderedImage) images.get(i), "jpg", new File("/tmp/2.jpg"));
+						}
+
+						Runtime.getRuntime().exec(new String[]{"tesseract", "/tmp/2.jpg", "/tmp/2.jpg", "-l spa", "text"}).waitFor();
+
+						BufferedReader br = new BufferedReader(new FileReader("/tmp/2.jpg.txt"));
+						try {
+							StringBuilder sb = new StringBuilder();
+							String line = br.readLine();
+
+							while (line != null) {
+								sb.append(line);
+								sb.append("\n");
+								line = br.readLine();
+							}
+							title = sb.toString().replace("\n", " ");
+						} finally {
+							br.close();
+						}
+//						OCRTextExtractor handler = new OCRTextExtractor(new File("/tmp/1.jpg"));
+//						tryImageExtraction(page, handler);
+//						map = handler.getMap();
+//						entry = map.firstEntry();
+
+						if(title.compareTo("")==0) {
 							COSInfoDict info = getDocument().getInfoDict();
 							title = info.getTitle();
 						}
